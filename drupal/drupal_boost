@@ -1,0 +1,115 @@
+# Добавляет указанную кодировку в поле “Content-Type” заголовка ответа
+charset	utf-8;
+
+# Некоторые изображение не имеет MIME-типа
+default_type	image/jpeg;
+
+# Обрабатываем ошибочный ответ Drupal-ом
+#error_page	404	/index.php;
+
+# Задаем индексный файл
+index	index.php;
+
+# "Дефолтный" location
+location / {
+    try_files	$uri	@cache;
+}
+
+# Запрещаем доступ к скрытым файлам и каталогам
+location ~ (^|/)\. {
+    return	404;
+}
+
+# Доступ к favicon без записи в access-лог и без записи в error-лог если файл не найден
+location = /favicon.ico {
+    log_not_found	off;
+    access_log	off;
+}
+
+# Доступ к robots.txt без записи в access-лог
+location = /robots.txt {
+    access_log	off;
+
+# Для модуля robotstxt
+#    try_files	$uri	@drupal;
+}
+
+# Для модуля humanstxt
+#location /humans.txt {
+#    access_log	off;
+#
+#    try_files	$uri	@drupal;
+#}
+
+
+# Запрещаем доступ к некоторым типам файлов
+location ~* \.(engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(\.php)?|xtmpl)$ {
+    return	404;
+}
+
+# Поддержка advagg_css и advagg_js
+location ~* files/advagg_(?:css|js)/ {
+    expires	30d;
+    etag	on;
+    try_files	$uri	@drupal;
+}
+
+# Работа с ImageCache. Отдаем изображения напрямую (без кэширования) или перенаправляем запрос в Drupal
+# Для Drupal 6
+#location ~ ^/sites/.*/files/imagecache/ {
+# Для Drupal7 и Drupal8
+location ~ ^/sites/.*/files/styles/ {
+    try_files	$uri	@drupal;
+}
+
+# Отдаем статику напрямую и не пишем в acces-логи
+location ~* \.(jpg|jpeg|gif|css|png|js|ico|html|swf|flv)$ {
+    etag		on;
+    expires		30d;
+    access_log		off;
+}
+
+# Задаем location для boost
+location @cache {
+# Если есть параметры, куки или если метод не GET/HEAD передаем обработку в друпал
+    error_page 418 = @drupal;
+
+    if ($query_string ~ ".+") {
+	return 418;
+    }
+    if ($http_cookie ~ SESS ) {
+	return 418;
+    }
+    if ($request_method !~ ^(GET|HEAD)$ ) {
+	return 418;
+    }
+
+# Запрещаем кэширование на стороне браузера
+    add_header Expires "Tue, 22 Sep 1974 08:00:00 GMT";
+    add_header Cache-Control "must-revalidate, post-check=0, pre-check=0";
+
+# Проверяем наличие закэшированных файлов, если их нет передаем обработку в друпал
+    try_files /cache/normal/$host/${uri}_.html /cache/perm/$host/${uri}_.css /cache/perm/$host/${uri}_.js /cache/$host/0$uri.html /cache/$host/0${uri}/index.html @drupal;
+}
+
+# Изменяем запрос и отправляем в location c разрешенными php-файлами
+location @drupal {
+      rewrite ^/(.*)$ /index.php?q=$1 last;
+}
+
+# Разрешаем выполнение только определенных php-файлов
+location ~* ^/(index|cron|xmlrpc).php$ {
+    include fastcgi/fastcgi_settings;
+}
+
+# Доступ к служебным файлам только после авторизации
+location ~* ^/(install|update|memcached|apc|info|authorize).php$ {
+    auth_basic "Restricted Area";
+    auth_basic_user_file /etc/nginx/security/htpasswd;
+    include fastcgi/fastcgi_settings;
+}
+
+# Запрещаем выполнение любых других php файлов
+location ~* \.php$ {
+    return	404;
+}

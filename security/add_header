@@ -1,0 +1,13 @@
+# запрет на отображение нашего контента в iframe
+add_header X-Frame-Options DENY;
+
+# Это скажет IE, что нет необходимости автоматически определять Content-Type, а необходимо использовать уже отданный content-type. Уже были security-баги у IE, связанные именно с автоматическим определением типа содержимого.
+add_header X-Content-Type-Options nosniff;
+
+# Заголовок для IE. Активирует встроенную XSS-защиту.
+add_header X-XSS-Protection "1; mode=block;";
+
+# Определяет, с каких доменов можно подгружать JS (X-Content-Security-Policy для IE10 и X-WebKit-CSP для FF/Chrome).
+# add_header X-Content-Security-Policy "allow 'self';";
+# add_header X-WebKit-CSP "allow 'self';";
+

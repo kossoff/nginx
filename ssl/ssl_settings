@@ -1,0 +1,24 @@
+#Разрешаем прикрепление OCSP-ответов сервером
+ssl_stapling	on;
+resolver	77.88.8.1;
+
+# Указывает, чтобы при использовании протоколов TLS серверные шифры были более приоритетны, чем клиентские
+ssl_prefer_server_ciphers	on;
+
+# Разрешаем только протокол TLS
+ssl_protocols	TLSv1 TLSv1.1 TLSv1.2;
+
+# Задаем параметры Диффи-Хеллмана.Генерируются командой openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
+ssl_dhparam	/etc/nginx/ssl/dhparam.pem;
+
+# Описывем разрешенные шифры
+ssl_ciphers kEECDH+AESGCM+AES128:kEECDH+AES128:kEECDH:kEDH:-3DES:kRSA+AESGCM+AES128:kRSA+AES128:kEDH+3DES:DES-CBC3-SHA:!RC4:!aNULL:!eNULL:!MD5:!EXPORT:!LOW:!SEED:!CAMELLIA:!IDEA:!PSK:!SRP:!SSLv2;
+
+# Задаем тип и размеры кэша для хранения параметров сессий
+ssl_session_cache	shared:SSL:16m;
+
+# Увеличиваем время, в течение которого клиент может повторно использовать параметры сессии, хранящейся в кэше
+ssl_session_timeout	28h;
+
+add_header Strict-Transport-Security "max-age=31536000";
+add_header Content-Security-Policy-Report-Only "default-src https:; script-src https: 'unsafe-eval' 'unsafe-inline'; style-src https: 'unsafe-inline'; img-src https: data:; font-src https: data:; report-uri /csp-report";

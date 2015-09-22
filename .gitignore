@@ -1,4 +1,5 @@
-/rewrites
-/vhosts.d/*.conf
+rewrites/*
+!rewrites/.gitkeep
+vhosts.d/*
 *~
 *.sublime-*

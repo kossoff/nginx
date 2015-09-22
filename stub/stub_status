@@ -1,0 +1,9 @@
+# внутренняя статистика nginx
+server {
+    listen *:8899;
+    server_name stub.local;
+    location / {
+	stub_status on;
+	access_log off;
+    }
+}

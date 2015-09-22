@@ -1,0 +1,39 @@
+server {
+    server_name	phppgadmin.example.com;
+
+    access_log	/var/log/nginx/phppgadmin.access.log main buffer=15k flush=5m;
+    error_log	/var/log/nginx/phppgadmin.error.log info;
+
+    root /var/www/phppgadmin;
+    index	index.php;
+
+# Для работы phppgadmin фреймы должны быть разрешены
+    add_header	X-Frame-Options "";
+
+    location / {
+	try_files	$uri @rewrite;
+    }
+
+# Запрещаем доступ к любым скрытым файлам и каталогам
+    location ~ (^|/)\. {
+    return	404;
+    }
+
+    location ~ ^/.*/.*\.php$ {
+	return	404;
+    }
+
+    location ~* \.(bmp|jpg|jpeg|pjpeg|gif|ico|png|css|doc|txt|js|docx|rtf|ppt|pdf|swf)$ {
+	expires	30d;
+	etag	on;
+	log_not_found	on;
+    }
+
+    location @rewrite {
+	rewrite	^/(.*)$ /index.php?q=$1;
+    }
+
+    location ~ \.php$ {
+	include	fastcgi/fastcgi_settings;
+    }
+}
