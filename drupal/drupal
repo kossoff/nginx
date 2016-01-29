@@ -58,7 +58,7 @@ location ~* files/advagg_(?:css|js)/ {
 # Для Drupal 6
 #location ~ ^/sites/.*/files/imagecache/ {
 # Для Drupal7 и Drupal8
-location ~ ^/sites/.*/files/styles/ {
+location ~ ^/.*/styles/ {
     try_files	$uri	@drupal;
 }
 
@@ -81,8 +81,8 @@ location ~* ^/(index|cron|xmlrpc).php$ {
 
 # Доступ к служебным файлам только после авторизации
 location ~* ^/(install|update|memcached|apc|info|authorize).php$ {
-    auth_basic "Restricted Area";
-    auth_basic_user_file /etc/nginx/security/htpasswd;
+#    auth_basic "Restricted Area";
+#    auth_basic_user_file /etc/nginx/security/htpasswd;
     include fastcgi/fastcgi_settings;
 }
 
