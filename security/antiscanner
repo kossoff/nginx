@@ -5,9 +5,9 @@ if ( $http_user_agent ~* (nmap|nikto|wikto|sf|sqlmap|bsqlbf|w3af|acunetix|havij|
 ## Deny certain Referers (case insensitive)
 ## The ~* makes it case insensitive as opposed to just a ~
 if ($http_referer ~* (semalt|babes|click|diamond|forsale|girl|jewelry|love|nudit|organic|poker|porn|poweroversoftware|sex|teen|video|webcam|zippo)) {
-  return 403;
+    return 403;
 }
 
 if ( $http_referer ~* (^iskalko\.ru|ilovevitaly\.com) ){
-  return 403;
+    return 403;
 }

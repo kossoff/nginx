@@ -1,24 +1,24 @@
 # http://nginx.com/resources/admin-guide/caching/
 
 # Задаем путь и другие параметры кэша ( уровень иерархии кэша, зону разделяемой памяти, максимальный размер кэша и т.д. )
-proxy_cache_path /var/tmp/nginx/cache levels=1:2 keys_zone=one:32m loader_threshold=300 loader_files=200 max_size=200m;
+proxy_cache_path    /var/tmp/nginx/cache levels=1:2 keys_zone=one:32m loader_threshold=300 loader_files=200 max_size=200m;
 
 # Кэшируемый ответ сначала сохраняется во временный файл в каталоге proxy_temp_path
-proxy_temp_path /var/tmp/nginx/proxy_temp;
+proxy_temp_path    /var/tmp/nginx/proxy_temp;
 
 # Пример использования прокси-кэша:
 
-# server {
-#     listen 8080;
-#     proxy_cache one;
-#     location / {
-#         proxy_pass http://backend1;
+#server {
+#    listen    8080;
+#    proxy_cache    one;
+#    location / {
+#        proxy_pass    http://backend1;
 #     }
 
-#     location /some/path {
-#         proxy_cache_valid any   1m;
-#         proxy_cache_min_uses 3;
-#         proxy_cache_bypass $cookie_nocache $arg_nocache$arg_comment;
-#         proxy_pass http://backend2;
+#    location /some/path {
+#        proxy_cache_valid any    1m;
+#        proxy_cache_min_uses    3;
+#        proxy_cache_bypass    $cookie_nocache $arg_nocache$arg_comment;
+#        proxy_pass    http://backend2;
 #     }
 # }

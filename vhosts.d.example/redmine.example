@@ -1,23 +1,22 @@
 server {
-    server_name	redmine.example.com;
+    server_name    redmine.example.com;
 
-    access_log	/var/log/nginx/redmine.access.log buffer=16k flush=5m;
-    error_log	/var/log/nginx/redmine.error.log info;
+    access_log    /var/log/nginx/redmine.access.log buffer=16k flush=5m;
+    error_log    /var/log/nginx/redmine.error.log info;
 
-    root	/path/to/redmine/public;
+    root    /path/to/redmine/public;
 
     location / {
-        try_files	/system/maintenance.html $uri $uri/index.html $uri.html @ruby;
+        try_files    /system/maintenance.html $uri $uri/index.html $uri.html @ruby;
     }
 
-    location	@ruby {
-        proxy_pass	http://127.0.0.1:3000;
+    location @ruby {
+        proxy_pass    http://127.0.0.1:3000;
     }
 
     location ~* \.(jpg|jpeg|gif|png|css|zip|tgz|gz|rar|bz2|doc|xls|exe|pdf|ppt|txt|tar|wav|bmp|rtf|js|ico)$ {
-	expires	30d;
-	etag on;
-        log_not_found	off;
-        access_log	off;
+        expires    30d;
+        log_not_found    off;
+        access_log    off;
     }
 }

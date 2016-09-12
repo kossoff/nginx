@@ -1,4 +1,5 @@
 server {
+<<<<<<< HEAD
     listen *:80;
 
     server_name example.org;
@@ -27,3 +28,24 @@ server {
     server_name www.example.org;
     return 301 http://example.org$request_uri;
 }
+=======
+    server_name    www.example.org;
+    return 301    http://example.org$request_uri;
+}
+
+server {
+    listen    *:80;
+
+    server_name    example.org;
+
+    access_log    /var/log/nginx/example.org.access.log main buffer=16k flush=5m;
+    error_log    /var/log/nginx/example.org.log info;
+
+    # Пишем логи в syslog-сервер, в тэге можно указывать только буквы и цифры
+    # error_log   syslog:server=192.168.88.115:5515,tag=ExampleOrgError info;
+
+    location / {
+        proxy_pass http://192.168.1.2;
+    }
+}
+>>>>>>> 3ef700c2a88577930d86f4bc9f3fbcc5e2fa1438

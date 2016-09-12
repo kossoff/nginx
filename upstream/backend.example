@@ -1,0 +1,24 @@
+# Описываем группы серверов, которые могут использоваться в директивах proxy_pass
+#upstream    backend1 {
+# В данной конфигурации запросы распределяются по серверам backend1 и backend2 в режиме round-robin. 
+# Если 3 попытки запросов в течении 30 секунд будут неудачны, запрос уйдет на сервер с параметром backup.
+#
+#    server    backend1.example.com max_fails=3 fail_timeout=30s;
+#    server    backend2.example.com:8080 max_fails=3 fail_timeout=30s;
+#
+#    server    backup1.example.com backup;
+#}
+
+#upstream    backend2 {
+# Балансировка нагрузки на основе IP-адресов клиентов. Используются первые три октета IPv4-адреса.
+# Запросы от одного и того же клиента всегда передаются на один и тот же сервер.
+#
+#    ip_hash;
+#
+#    server    backend1.example.com;
+#    server    backend2.example.com:8080;
+#
+#}
+
+# Опеределяем, что является неудачной попыткой работы с сервером
+#proxy_next_upstream    error timeout invalid_header http_500 http_502 http_503 http_504;
