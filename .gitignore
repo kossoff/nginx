@@ -1,5 +1,10 @@
 rewrites/*
 !rewrites/.gitkeep
 vhosts.d/*
+!vhosts.d/.gitkeep
+ssl/certificates/*
+!ssl/certificates/.gitkeep
+drupal/local/*
+!drupal/local/.gitkeep
 *~
 *.sublime-*

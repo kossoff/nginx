@@ -1,22 +1,22 @@
 # Указываем сокет на котором работает FastCGI-сервер ( например, php-fpm )
-fastcgi_pass unix:/var/run/php5-fpm.sock;
+fastcgi_pass    unix:/run/php-fpm.sock;
 
 # Задаем имя файла, который при создании переменной $fastcgi_script_name будет добавляться после URI, если URI заканчивается слэшом
-fastcgi_index index.php;
+fastcgi_index    index.php;
 
 # Задаем регулярное выражение, выделяющее значение для переменной $fastcgi_path_info (в данном случае - второе выделение)
-fastcgi_split_path_info ^(.+\.php)(/.+)$;
+fastcgi_split_path_info    ^(.+?\.php)(|/.*)$;
 
 # Задаем параметр SCRIPT_FILENAME для передачи в php-fpm
-fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+fastcgi_param    SCRIPT_FILENAME    $document_root$fastcgi_script_name;
 
 #Перенаправляем ответы с кодом 300 и больше на обработку nginx
-fastcgi_intercept_errors on;
+fastcgi_intercept_errors    on;
 
 # Уменьшаем значения таймаутов на установку соединения, а также на чтение и передачу данных
-fastcgi_connect_timeout   15s;
-fastcgi_read_timeout      15s;
-fastcgi_send_timeout      15s;
+fastcgi_connect_timeout    15s;
+fastcgi_read_timeout    15s;
+fastcgi_send_timeout    15s;
 
 # Подключаем файл с параметрами, которые будут передаваться FastCGI-серверу
-include	fastcgi/fastcgi_params;
+include    fastcgi/params;

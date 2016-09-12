@@ -1,26 +1,26 @@
 # Включаем проверку готового сжатого файла
-gzip_static         on;
+gzip_static    on;
 
 # Если готового сжатого файла нет, сжимаем ответ методом gzip
-gzip                on;
+gzip    on;
 
 # Устанавливаем минимальную длину ответа, который будет сжиматься
-gzip_min_length     1k;
+gzip_min_length    1k;
 
 # Устанавливаем степень сжатия ответа ( выше 6 ставить не имеет смысла )
-gzip_comp_level     6;
+gzip_comp_level    6;
 
 # Увеличиваем число буферов, в которые будет сжиматься ответ
-gzip_buffers        64 4k;
+gzip_buffers    64 4k;
 
 # Разрешаем сжатие для указанных MIME-типов
-gzip_types          text/plain application/xhtml+xml text/css application/xml application/xml+rss text/javascript application/javascript application/x-javascript;
+gzip_types    text/plain application/xhtml+xml text/css application/xml application/xml+rss text/javascript application/javascript application/x-javascript;
 
 # Разрешаем сжатие ответа для проксированных запросов
-gzip_proxied        any;
+gzip_proxied    any;
 
 # Отключаем сжатие для запросов с полями заголовка User-Agent MSIE 4-6
-gzip_disable        "msie6";
+gzip_disable    "msie6";
 
 # Разрешаем выдавать в ответе поле заголовка "Vary: Accept-Encoding"
-gzip_vary           on;
+gzip_vary    on;

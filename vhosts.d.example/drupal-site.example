@@ -1,23 +1,24 @@
 server {
-    server_name www.example.org;
-    return 301 http://example.org$request_uri;
+    server_name    www.example.org;
+    return    301 http://example.org$request_uri;
 }
 
 server {
-    listen *:80;
+    listen    *:80;
 
-    server_name example.org;
+    server_name    example.org;
 
-    access_log /var/log/nginx/example.access.log main  buffer=16k flush=5m;
-    error_log  /var/log/nginx/example.error.log info;
+    access_log    /var/log/nginx/example.access.log main buffer=16k flush=5m;
+    error_log    /var/log/nginx/example.error.log info;
 
     # Пишем логи в syslog-сервер, в тэге можно указывать только буквы и цифры
-    error_log  syslog:server=192.168.88.115:5515,tag=NginxErrorExampleOrg info;
+    # error_log    syslog:server=192.168.88.115:5515,tag=NginxErrorExampleOrg info;
 
-    root /var/www/drupal7;
+    root    /var/www/drupal7;
 
     # Подключаем конфиги для друпала
-    include drupal/drupal;
+    include    drupal/config_78;
 
-    include error/error_pages;
+    # Указываем location для 500-х ошибок
+    # include    error/50x_location;
 }
