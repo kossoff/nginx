@@ -2,27 +2,46 @@ server {
     listen    80;
     server_name    example.org;
 
-    access_log    /var/log/nginx/example.access.log main buffer=16k flush=5m;
+    access_log   /var/log/nginx/example.access.log main buffer=16k flush=5m;
     error_log    /var/log/nginx/example.error.log info;
 
     # Пишем логи в syslog-сервер, в тэге можно указывать только буквы и цифры
-    # error_log    syslog:server=192.168.88.115:5515,tag=ExampleOrgError info;
+    # error_log    syslog:server=192.168.1.100:5515,tag=ExampleOrgError info;
 
-    root    /home/rubyworker/example/public;
+    real_ip_header X-Real-IP;
+
+    root    /home/rubyworker/application/public;
     try_files    /system/maintenance.html $uri $uri/index.html $uri.html @ruby;
 
     location @ruby {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_set_header  X-Forwarded-Ssl on; # Optional
+        proxy_set_header  X-Forwarded-Port $server_port;
+        proxy_set_header  X-Forwarded-Host $host;
+
+        proxy_redirect off;
+
         proxy_pass    http://unix:/home/rubyworker/example/tmp/puma/puma-example.sock;
     }
 
-    # Для Rails < 4.x
-    #location ~* ^/(images|javascripts|stylesheets)
-    # Для Rails >= 4.x
-    location /assets/
-        expires    30d;
-        log_not_found    off;
-        access_log    off;
+    location ~ ^/sidekiq/  {
+        try_files $uri @ruby;
     }
 
+    location ~* \.(jpg|jpeg|gif|png|css|zip|tgz|gz|rar|bz2|doc|xls|exe|ppt|txt|tar|wav|bmp|rtf|js|ico)$ {
+        add_header Last-Modified "";
+        add_header ETag "";
+        add_header Cache-Control public;
+
+        gzip_static on;
+
+        expires 1y;
+
+        log_not_found   off;
+        access_log      off;
+    }
 #    include    error/50x_location;
 }
