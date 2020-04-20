@@ -1,5 +1,7 @@
+error_page 500 501 502 503 504 505 506 507 508 510 511 /error.html;
+
 # Custom page for 50x errors
 location = /50x.html {
-    root    /var/www/error;
+    root    /var/www/errors;
     internal;
 }
