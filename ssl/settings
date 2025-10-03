@@ -5,8 +5,8 @@ resolver    77.88.8.1;
 # Указывает, чтобы при использовании протоколов TLS серверные шифры были более приоритетны, чем клиентские
 ssl_prefer_server_ciphers    on;
 
-# Разрешаем только протокол TLS
-ssl_protocols    TLSv1 TLSv1.1 TLSv1.2;
+# Разрешаем только протокол TLS старших версий
+ssl_protocols TLSv1.2 TLSv1.3; # Dropping SSLv3 (POODLE), TLS 1.0, 1.1
 
 # Задаем параметры Диффи-Хеллмана.Генерируются командой openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
 ssl_dhparam    ssl/certificates/dhparam.pem;
