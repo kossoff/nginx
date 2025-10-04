@@ -9,7 +9,7 @@ ssl_prefer_server_ciphers    on;
 ssl_protocols TLSv1.2 TLSv1.3; # Dropping SSLv3 (POODLE), TLS 1.0, 1.1
 
 # Задаем параметры Диффи-Хеллмана.Генерируются командой openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
-ssl_dhparam    ssl/certificates/dhparam.pem;
+ssl_dhparam    ssl/dhparam.pem;
 
 # Описывем разрешенные шифры
 ssl_ciphers    kEECDH+AESGCM+AES128:kEECDH+AES128:kEECDH:kEDH:-3DES:kRSA+AESGCM+AES128:kRSA+AES128:kEDH+3DES:DES-CBC3-SHA:!RC4:!aNULL:!eNULL:!MD5:!EXPORT:!LOW:!SEED:!CAMELLIA:!IDEA:!PSK:!SRP:!SSLv2;
